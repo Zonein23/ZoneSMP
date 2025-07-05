@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debiting - ZoneSMP</title>
+    <style>
+        body {
+            background: linear-gradient(270deg, #3498db, #a04dc4, #3498db);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease-in-out infinite;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            background: rgba(255,255,255,0.35);
+            border-radius: 18px;
+            max-width: 900px;
+            margin: 88px auto 40px;
+            padding: 32px 40px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18), 0 1.5px 8px rgba(160,77,196,0.08);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border: 1.5px solid rgba(255,255,255,0.32);
+        }
+        h1 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .debit-card-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+            margin-top: 32px;
+        }
+        .debit-card {
+            background: rgba(160,77,196,0.13);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+            padding: 24px 32px;
+            min-width: 260px;
+            max-width: 320px;
+            color: #23272a;
+            font-size: 1.1em;
+            border: 1.5px solid #a04dc4;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .debit-card strong {
+            color: #8e44ad;
+            font-size: 1.15em;
+            margin-bottom: 8px;
+        }
+        .custom-btn {
+            display: inline-block;
+            background: #a04dc4;
+            color: #fff;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+            transition: background 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            margin-top: 32px;
+        }
+        .custom-btn:hover, .custom-btn:focus {
+            background: #8e44ad;
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(160,77,196,0.18);
+        }
+        .debit-container {
+            display: flex;
+            flex-direction: row;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+        }
+        .debit-left {
+            flex: 1 1 0;
+            min-width: 320px;
+            max-width: 420px;
+            margin: 0 auto;
+        }
+        .card-ui-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card-ui {
+            background: linear-gradient(135deg, rgba(160,77,196,0.60) 60%, rgba(52,152,219,0.60) 100%);
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(44,62,80,0.18);
+            width: 320px;
+            height: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 28px 28px 18px 28px;
+            margin-bottom: 24px;
+            position: relative;
+            backdrop-filter: blur(10px) saturate(140%);
+            -webkit-backdrop-filter: blur(10px) saturate(140%);
+            border: 1.5px solid rgba(255,255,255,0.22);
+        }
+        .chip {
+            width: 44px;
+            height: 32px;
+            background: linear-gradient(135deg, #e0e0e0 60%, #bdbdbd 100%);
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+        .card-number-input, .card-pin-input {
+            background: rgba(255,255,255,0.85);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.15em;
+            padding: 10px 16px;
+            margin-bottom: 16px;
+            width: 100%;
+            box-sizing: border-box;
+            letter-spacing: 2px;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+        .card-number-input:focus, .card-pin-input:focus {
+            box-shadow: 0 0 0 2px #a04dc4;
+        }
+        .card-pin-input {
+            width: 60%;
+            margin-bottom: 0;
+        }
+        .debit-login-form button {
+            width: 100%;
+            margin-top: 18px;
+        }
+        .debit-info-box {
+            background: rgba(255,255,255,0.45);
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+            padding: 32px 28px 24px 28px;
+            border: 1.5px solid rgba(160,77,196,0.13);
+            margin-top: 56px;
+            max-width: 420px;
+            min-width: 320px;
+            flex: 1 1 0;
+            margin-left: 32px;
+        }
+        .debit-info-box h2 {
+            color: #8e44ad;
+            margin-bottom: 14px;
+            font-size: 1.25em;
+        }
+        .debit-info-box p {
+            color: #23272a;
+            font-size: 1.08em;
+            line-height: 1.6;
+        }
+        @media (max-width: 900px) {
+            .container {
+                padding: 18px 4vw;
+                margin: 88px 2vw 24px 2vw;
+            }
+            .zonesmp-topbar {
+                height: 54px;
+            }
+            .zonesmp-topbar span {
+                font-size: 1.3em;
+            }
+            .zonesmp-topbar .custom-btn {
+                margin-right: 12px;
+                font-size: 0.98em;
+                padding: 8px 16px;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 8px 2vw;
+                margin: 70px 1vw 12px 1vw;
+            }
+            .zonesmp-topbar {
+                height: 44px;
+            }
+            .zonesmp-topbar span {
+                font-size: 1em;
+            }
+            .zonesmp-topbar .custom-btn {
+                margin-right: 4px;
+                font-size: 0.85em;
+                padding: 6px 10px;
+            }
+            h1 {
+                font-size: 1em;
+            }
+        }
+        @media (max-width: 900px) {
+            .debit-container {
+                flex-direction: column;
+                gap: 0;
+            }
+            .debit-left {
+                margin-top: 32px;
+            }
+            .card-ui {
+                width: 100%;
+                min-width: 0;
+            }
+            .debit-info-box {
+                margin-left: 0;
+                margin-top: 32px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container debit-container">
+        <div class="debit-left">
+            <h1>Debit Card Login</h1>
+            <form id="debitLoginForm" class="debit-login-form card-ui-form">
+                <div class="card-ui">
+                    <div class="chip"></div>
+                    <input type="text" id="cardNumber" name="cardNumber" class="card-number-input" placeholder="Card Number" maxlength="19" required>
+                    <input type="password" id="cardPin" name="cardPin" class="card-pin-input" placeholder="PIN" maxlength="4" required>
+                </div>
+                <button type="submit" class="custom-btn">Login</button>
+            </form>
+            <div id="loginResult" style="margin-top:18px;font-size:1.05em;"></div>
+            <div id="loginResultBox" style="display:none;"></div>
+        </div>
+        <div class="debit-info-box" style="flex:1 1 0;min-width:320px;max-width:420px;margin:0 auto;background:rgba(255,255,255,0.32);border-radius:18px;box-shadow:0 4px 24px rgba(44,62,80,0.13);backdrop-filter:blur(14px) saturate(150%);-webkit-backdrop-filter:blur(14px) saturate(150%);border:1.5px solid rgba(160,77,196,0.18);padding:28px 32px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;">
+            <h2 style="color:#8e44ad;margin-top:0;margin-bottom:12px;font-size:1.35em;">About Debit Cards & ZN's</h2>
+            <p style="margin-bottom:18px;font-size:1.08em;">Your debit card stores rupees, but in ZoneSMP, every rupee you have is converted to <b>Zoneps (ZN's)</b> at a rate of <b>2×</b> the rupee amount.<br>For example, if you have ₹1,000, you get <b>2,000 ZN's</b>!<br><span style='color:#8e44ad;font-size:1.01em;'>Example: 100 rupees × 2 = <b>200 ZN's</b></span></p>
+            <div style="width:100%;margin-bottom:8px;">
+                <table style="width:100%;border-collapse:collapse;font-size:1.05em;text-align:center;">
+                    <thead>
+                        <tr style="color:#a04dc4;font-weight:600;">
+                            <th style="text-align:center;padding:8px 0;">Member</th>
+                            <th style="text-align:center;padding:8px 0;">Role</th>
+                            <th style="text-align:center;padding:8px 0;">Vanguard Type</th>
+                            <th style="text-align:center;padding:8px 0;">Zoneps (ZN's)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Zonein23</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Owner</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Ve+</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">∞ ZN's</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Jim</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Co&#8209;owner</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">Ve+</td>
+                            <td style="text-align:center; letter-spacing: 0.08em;">∞ ZN's</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top:10px;font-size:0.98em;color:#555;">Use your debit card to log in and see your ZN's balance!</p>
+        </div>
+    </div>
+    <a href="ZoneSMP.html" class="custom-btn" style="position:absolute;bottom:32px;left:50%;transform:translateX(-50%);">Back to Home</a>
+    <script>
+        // Remove card list and only keep login logic
+        const debitCards = [
+            { cardNumber: '898 060 2300', pin: '2300', name: 'Zonein23', id: '002301' },
+            // Jim's card can be added here if needed, but not shown in UI
+        ];
+        document.getElementById('debitLoginForm').onsubmit = function(e) {
+            e.preventDefault();
+            const cardNumber = document.getElementById('cardNumber').value.trim();
+            const cardPin = document.getElementById('cardPin').value.trim();
+            const card = debitCards.find(c => c.cardNumber === cardNumber && c.pin === cardPin);
+            const resultBox = document.getElementById('loginResultBox');
+            if(card) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `
+                    <div style="background:rgba(255,255,255,0.45);border-radius:16px;box-shadow:0 2px 12px rgba(160,77,196,0.10);padding:28px 24px 20px 24px;margin:24px auto 0 auto;max-width:400px;border:1.5px solid rgba(160,77,196,0.13);text-align:center;">
+                        <h3 style='color:#8e44ad;margin-top:0;margin-bottom:16px;font-size:1.18em;'>Card Details</h3>
+                        <div style='font-size:1.08em;margin-bottom:8px;'><b>Name:</b> <span style='letter-spacing:0.08em;'>${card.name}</span></div>
+                        <div style='font-size:1.08em;margin-bottom:8px;'><b>Card Number:</b> <span style='letter-spacing:0.08em;'>${card.cardNumber}</span></div>
+                        <div style='font-size:1.08em;margin-bottom:8px;'><b>PIN:</b> <span style='letter-spacing:0.08em;'>${card.pin}</span></div>
+                        <div style='font-size:1.08em;margin-bottom:8px;'><b>ID:</b> <span style='letter-spacing:0.08em;'>${card.id}</span></div>
+                        <div style='font-size:1.08em;margin-bottom:8px;'><b>Zoneps (ZN's):</b> <span style='letter-spacing:0.08em;'>∞ ZN's</span></div>
+                        <div style='font-size:1.08em;'><b>Vanguard Type:</b> <span style='letter-spacing:0.08em;'>Ve+</span></div>
+                    </div>
+                `;
+            } else {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `<div style='background:rgba(255,255,255,0.45);border-radius:14px;box-shadow:0 2px 12px rgba(160,77,196,0.10);padding:18px 18px 14px 18px;margin:24px auto 0 auto;max-width:400px;border:1.5px solid rgba(160,77,196,0.13);text-align:center;'><span style='color:red;'>Invalid card number or PIN.</span></div>`;
+            }
+        };
+        function parseRupees(str) {
+            return parseInt(str.replace(/[^\d]/g, ''), 10) || 0;
+        }
+        function showZNConversion() {
+            const znDiv = document.getElementById('znConversion');
+            let html = '<b>Sample Conversion:</b><br>';
+            for(const card of debitCards) {
+                const rupees = parseRupees(card.balance);
+                const zn = rupees * 2;
+                html += `${card.cardNumber.slice(-4)}: ₹${rupees} = <b>${zn} ZN's</b><br>`;
+            }
+            znDiv.innerHTML = html;
+        }
+        showZNConversion();
+    </script>
+</body>
+</html>

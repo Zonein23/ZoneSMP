@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - ZoneSMP</title>
+    <style>
+        body {
+            background: linear-gradient(270deg, #3498db, #a04dc4, #3498db);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease-in-out infinite;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .zonesmp-topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 64px;
+            background: rgba(255,255,255,0.32);
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+            border-bottom: 1.5px solid rgba(160,77,196,0.18);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+        }
+        .zonesmp-topbar span {
+            font-size: 2.1em;
+            font-weight: 700;
+            color: #8e44ad;
+            letter-spacing: 0.08em;
+            text-shadow: 0 2px 12px rgba(160,77,196,0.10);
+        }
+        .zonesmp-topbar .custom-btn {
+            margin-right: 40px;
+            margin-top: 0;
+            position: relative;
+            right: 0;
+            top: 0;
+            align-self: center;
+            box-shadow: none;
+        }
+        .container {
+            background: rgba(255,255,255,0.35);
+            border-radius: 18px;
+            max-width: 900px;
+            margin: 104px auto 40px;
+            padding: 32px 40px;
+            box-shadow: 0 8px 32px rgba(44,62,80,0.18), 0 1.5px 8px rgba(160,77,196,0.08);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+            border: 1.5px solid rgba(255,255,255,0.32);
+        }
+        h1 {
+            color: #8e44ad;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        p {
+            color: #23272a;
+            font-size: 1.15em;
+            line-height: 1.7;
+        }
+        .custom-btn {
+            display: inline-block;
+            background: #a04dc4;
+            color: #fff;
+            padding: 10px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 500;
+            text-decoration: none;
+            box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+            transition: background 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            margin-top: 32px;
+        }
+        .custom-btn:hover, .custom-btn:focus {
+            background: #8e44ad;
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(160,77,196,0.18);
+        }
+        .discord-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #5865F2;
+            color: #fff !important;
+            font-weight: 600;
+            font-size: 1.08em;
+            border-radius: 8px;
+            padding: 10px 26px;
+            box-shadow: 0 4px 18px rgba(88,101,242,0.18);
+            text-decoration: none;
+            border: none;
+            transition: background 0.18s, box-shadow 0.18s, transform 0.18s;
+        }
+        .discord-btn:hover, .discord-btn:focus {
+            background: #4752c4;
+            color: #fff !important;
+            box-shadow: 0 6px 24px rgba(88,101,242,0.28);
+            transform: translateY(-2px) scale(1.04);
+            text-decoration: none;
+        }
+        .glass-box {
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 14px;
+            box-shadow: 0 2px 12px rgba(44, 62, 80, 0.10);
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            border: 1.5px solid #a04dc4;
+        }
+        .glass-box h2 {
+            margin-top: 0;
+        }
+        .glass-box p, .glass-box ul, .glass-box ol {
+            color: #23272a;
+            font-size: 1.08em;
+            padding-left: 18px;
+        }
+        .glass-box a {
+            color: #a04dc4;
+            text-decoration: underline;
+        }
+        @media (max-width: 900px) {
+            .container {
+                padding: 18px 4vw;
+                margin: 88px 2vw 24px 2vw;
+            }
+            .zonesmp-topbar {
+                height: 54px;
+            }
+            .zonesmp-topbar span {
+                font-size: 1.3em;
+            }
+            .zonesmp-topbar .custom-btn {
+                margin-right: 12px;
+                font-size: 0.98em;
+                padding: 8px 16px;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 8px 2vw;
+                margin: 70px 1vw 12px 1vw;
+            }
+            .zonesmp-topbar {
+                height: 44px;
+            }
+            .zonesmp-topbar span {
+                font-size: 1em;
+            }
+            .zonesmp-topbar .custom-btn {
+                margin-right: 4px;
+                font-size: 0.85em;
+                padding: 6px 10px;
+            }
+            h1 {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="zonesmp-topbar">
+        <span style="flex:1;text-align:center;">ZoneSMP</span>
+        <a href="index.html" class="custom-btn" style="margin-right:40px;margin-top:0;position:relative;right:0;top:0;align-self:center;box-shadow:none;">Back to Home</a>
+    </div>
+    <div class="container">
+        <h1>About Us</h1>
+        <div style="display: flex; flex-wrap: wrap; gap: 32px; justify-content: center;">
+            <div class="glass-box" style="flex:1 1 320px; min-width:280px;">
+                <h2 style="color:#3498db;">Our Mission</h2>
+                <p>To create a safe, inclusive, and engaging space for Minecraft and Discord fans to build, explore, and connect. We believe in the power of community and creativity!</p>
+            </div>
+            <div class="glass-box" style="flex:1 1 320px; min-width:280px; border-color:#a04dc4;">
+                <h2 style="color:#a04dc4;">Meet the Team</h2>
+                <ul>
+                    <li><b>Zonein23</b> — Owner & the only one</li>
+                    <li><b>Jim</b> — Co-owner & Community Lead</li>
+                </ul>
+            </div>
+        </div>
+        <div class="glass-box" style="border-color:#3498db;">
+            <h2 style="color:#3498db;">What Makes Us Unique?</h2>
+            <ul>
+                <li><b>Active Community:</b> Friendly, helpful, and always welcoming new faces.</li>
+                <li><b>Creative Freedom:</b> Build anything you can imagine, from cozy cottages to massive cities.</li>
+                <li><b>Events & Mini-Games:</b> Regular server events, PvP tournaments, scavenger hunts, and more.</li>
+                <li><b>Player-Driven Lore:</b> Shape the story of the server with your own adventures, alliances, and rivalries.</li>
+                <li><b>Supportive Staff:</b> Moderators and admins dedicated to keeping the server safe, fair, and fun.</li>
+                <li><b>Cross-Platform:</b> Join from Java or Bedrock editions and play together seamlessly.</li>
+            </ul>
+        </div>
+        <div class="glass-box" style="border-color:#a04dc4;">
+            <h2 style="color:#a04dc4;">How to Join</h2>
+            <ol>
+                <li>Connect to our Minecraft server: <b>ZoneSMP_in.atenos.me</b></li>
+                <li>Join our Discord: <a href="https://discord.gg/W83hX3Rz4N" class="discord-btn">ZoneSMP Discord</a></li>
+                <li>Introduce yourself and start exploring!</li>
+            </ol>
+        </div>
+        <div class="glass-box" style="border-color:#3498db;">
+            <h2 style="color:#3498db;">Community Highlights</h2>
+            <ul>
+                <li>🏆 <b>Monthly Build Contests</b> — Show off your skills and win cool rewards!</li>
+                <li>🎉 <b>Special Events</b> — Holiday parties, lore reveals, and more surprises.</li>
+                <li>🤝 <b>Alliances & Rivalries</b> — Form teams, make friends, and create your own stories.</li>
+                <li>🛡️ <b>Safe & Friendly</b> — Zero tolerance for toxicity, griefing, or discrimination.</li>
+            </ul>
+        </div>
+        <div class="glass-box" style="border-color:#a04dc4; text-align:center;">
+            <h2 style="color:#a04dc4;">Ready to Join?</h2>
+            <p>Become part of the ZoneSMP family today! Whether you’re here to build, battle, or just hang out, you’ll find your place in our community. We can’t wait to see what you’ll create and the memories you’ll make with us.</p>
+            <a href="https://discord.gg/W83hX3Rz4N" class="discord-btn" style="margin-top:18px;display:inline-flex;align-items:center;gap:10px;"> <img src="https://cdn.jsdelivr.net/gh/edent/SuperTinyIcons/images/svg/discord.svg" alt="Discord" style="width:1.5em;height:1.5em;vertical-align:middle;"> Join our Discord</a>
+        </div>
+    </div>
+</body>
+</html>

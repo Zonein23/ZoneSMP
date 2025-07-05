@@ -1,0 +1,460 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>ZoneSMP</title>
+        <style>
+            body {
+                /* Animated gradient background from blue to purple */
+                background: linear-gradient(270deg, #3498db, #a04dc4, #3498db);
+                background-size: 400% 400%;
+                animation: gradientBG 12s ease-in-out infinite;
+                min-height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+            @keyframes gradientBG {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+            .topbar {
+                width: 100vw;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 100;
+                background: rgba(255,255,255,0.65);
+                backdrop-filter: blur(10px);
+                box-shadow: 0 2px 16px rgba(44,62,80,0.10);
+                padding: 0;
+                margin: 0;
+                height: 64px;
+                display: flex;
+                align-items: center;
+
+                justify-content: center;
+            }
+            .topbar h1 {
+                color: #8e44ad;
+                font-size: 2.1em;
+                margin: 0 auto 0 0;
+                letter-spacing: 2px;
+                font-weight: 700;
+                flex: 1;
+                text-align: center;
+            }
+            .login-btn-topbar {
+                margin-left: 32px;
+                margin-right: 0;
+                height: 40px;
+                align-self: center;
+                font-size: 1em;
+                padding: 0 22px;
+                order: -1;
+                background: #a04dc4 !important;
+                color: #fff !important;
+                box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+                border: none;
+                transition: background 0.2s, box-shadow 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .login-btn-topbar:hover, .login-btn-topbar:focus {
+                background: #8e44ad !important;
+                color: #fff !important;
+                box-shadow: 0 4px 18px rgba(160,77,196,0.18);
+            }
+            .container {
+                background: rgba(255,255,255,0.35); /* More translucent for glass effect */
+                border-radius: 18px;
+                max-width: 900px;
+                margin: 88px auto 40px; /* Adjusted margin for top spacing */
+                padding: 32px 40px;
+                box-shadow: 0 8px 32px rgba(44,62,80,0.18), 0 1.5px 8px rgba(160,77,196,0.08);
+                backdrop-filter: blur(18px) saturate(160%);
+                -webkit-backdrop-filter: blur(18px) saturate(160%);
+                border: 1.5px solid rgba(255,255,255,0.32);
+            }
+            h1 {
+                color: #8e44ad;
+                margin-bottom: 16px;
+            }
+            p {
+                color: #222;
+                font-size: 1.1em;
+                line-height: 1.7;
+            }
+            .custom-btn {
+                display: inline-block;
+                background: #23272a;
+                color: #fff;
+                padding: 10px 24px;
+                border: none;
+                border-radius: 8px;
+                font-size: 1em;
+                font-weight: 500;
+                text-decoration: none;
+                box-shadow: 0 2px 8px rgba(44,62,80,0.10);
+                transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+                cursor: pointer;
+            }
+            .custom-btn:hover, .custom-btn:focus {
+                background: #111214;
+                transform: translateY(-2px) scale(1.04);
+                box-shadow: 0 4px 16px rgba(44,62,80,0.18);
+                color: #fff;
+            }
+            .feedback-box {
+                margin-top: 32px;
+                margin-bottom: 48px;
+                max-width: 700px;
+            }
+            .feedback-box h2 {
+                color: #3498db;
+                margin-bottom: 18px;
+                font-size: 1.4em;
+                font-weight: 700;
+                letter-spacing: 1px;
+            }
+            .feedback-box form label {
+                color: #23272a;
+            }
+            .login-btn-topbar {
+                margin-left: 32px;
+                height: 40px;
+                align-self: center;
+                font-size: 1em;
+                padding: 0 22px;
+            }
+            .login-modal-topbar {
+                position: fixed;
+                top: 72px;
+                right: 32px;
+                background: rgba(255,255,255,0.95);
+                border-radius: 14px;
+                box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+                padding: 24px 28px 18px 28px;
+                z-index: 200;
+                min-width: 320px;
+                border: 1.5px solid rgba(160,77,196,0.18);
+                backdrop-filter: blur(10px) saturate(140%);
+            }
+            .login-form-inline {
+                display: flex;
+                flex-direction: column;
+            }
+            .login-form-inline input {
+                width: 100%;
+                padding: 8px 10px;
+                margin: 8px 0 16px 0;
+                border-radius: 6px;
+                border: 1.5px solid #ccc;
+                background: rgba(255,255,255,0.7);
+            }
+            .login-form-inline button[type="submit"] {
+                margin-top: 6px;
+                margin-right: 12px;
+            }
+            .login-form-inline button[type="button"] {
+                margin-left: 0;
+            }
+            .login-form-inline .custom-btn + .custom-btn {
+                margin-left: 16px;
+            }
+            .about-btn {
+                background: #a04dc4 !important;
+                color: #fff !important;
+                font-size: 1.1em;
+                font-weight: 500;
+                border-radius: 8px;
+                box-shadow: 0 2px 12px rgba(160,77,196,0.10);
+                transition: background 0.2s, box-shadow 0.2s;
+                text-align: center;
+                padding: 10px 28px;
+                display: block;
+                margin: 0 auto;
+                position: absolute;
+                top: 18px;
+                right: 32px;
+                z-index: 150;
+            }
+            .about-btn:hover, .about-btn:focus {
+                background: #8e44ad !important;
+                color: #fff !important;
+                box-shadow: 0 4px 18px rgba(160,77,196,0.18);
+            }
+            .debit-btn {
+                background: #9b59b6 !important;
+                color: #fff !important;
+                font-size: 1.1em;
+                font-weight: 500;
+                border-radius: 8px;
+                box-shadow: 0 2px 12px rgba(155,89,182,0.10);
+                transition: background 0.2s, box-shadow 0.2s;
+                text-align: center;
+                padding: 10px 28px;
+                display: block;
+                margin: 0 auto;
+                position: absolute;
+                top: 18px;
+                right: 180px;
+                z-index: 150;
+            }
+            .debit-btn:hover, .debit-btn:focus {
+                background: #8e44ad !important;
+                color: #fff !important;
+                box-shadow: 0 4px 18px rgba(155,89,182,0.18);
+            }
+            @media (max-width: 900px) {
+                .container {
+                    padding: 18px 4vw;
+                    margin: 88px 2vw 24px 2vw;
+                }
+                .topbar {
+                    height: 54px;
+                }
+                .topbar h1 {
+                    font-size: 1.3em;
+                }
+                .login-btn-topbar, .about-btn, .debit-btn {
+                    font-size: 0.98em;
+                    padding: 8px 16px;
+                }
+                .about-btn { right: 12px; }
+                .debit-btn { right: 120px; }
+            }
+            @media (max-width: 600px) {
+                .container {
+                    padding: 8px 2vw;
+                    margin: 70px 1vw 12px 1vw;
+                }
+                .topbar {
+                    height: 44px;
+                }
+                .topbar h1 {
+                    font-size: 1em;
+                }
+                .login-btn-topbar, .about-btn, .debit-btn {
+                    font-size: 0.85em;
+                    padding: 6px 10px;
+                }
+                .about-btn { right: 2px; }
+                .debit-btn { right: 80px; }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="topbar">
+            <a href="gmail-login.html" class="custom-btn login-btn-topbar" style="display:flex;align-items:center;justify-content:center;">Login with Gmail</a>
+            <h1>ZoneSMP</h1>
+            <a href="about.html" class="custom-btn about-btn" style="position:absolute;top:18px;right:32px;z-index:150;">About us</a>
+            <a href="debiting.html" class="custom-btn debit-btn" style="position:absolute;top:18px;right:180px;z-index:150;">Debiting</a>
+        </div>
+        <div class="container">
+            <p>🛠️ Welcome to Zone SMP — Where Minecraft Meets Community!<br>
+Zone SMP is more than just a server; it's a buzzing intersection between the creativity of Minecraft and the vibrant conversations of Discord. Whether you're building epic castles, surviving against creepers, or just hanging out to vibe with friends, Zone SMP is designed to be your digital playground.<br>
+🎮 Minecraft Magic:
+- Hosted as a Survival Multiplayer (SMP) experience, the server invites players to collaborate, explore, and thrive in a dynamic world.
+- Custom events, player-driven stories, and mini-games add depth and variety to the gameplay.
+- Whether you're a redstone genius or a builder with dreams of grandeur, there's room for every style.<br>
+💬 Discord Vibes:
+- The Discord server acts as the social heart of Zone SMP — a place where ideas flow, memes flourish, and friendships are forged.
+- Dedicated channels for trades, builds, lore, and general banter keep things organized and interactive.
+- Moderated by a team that values fairness and fun, it’s a safe space for all players.<br>
+🌟 Community-Driven:
+- The server thrives on the contributions of its members — from cool builds to epic PvP moments.
+- Roles, ranks, and rewards reflect your in-game efforts and Discord activity.
+- Regular updates and polls ensure everyone has a voice in shaping the future of Zone SMP.
+So if you're into mining diamonds by day and sharing spicy memes by night, Zone SMP might just be your next favorite hangout. Want help designing a server logo, setting up new channels, or writing a welcome message for new players? I'm totally in — just say the word. 🧱✨
+               </p>
+            <table style="border: double; border-color: #3498db; width: 100%; margin-top: 20px;">
+                <tr>
+                    <th style="padding: 10px; text-align: left;">Feature</th>
+                    <th style="padding: 10px; text-align: left;">ID</th>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #3498db;">Minecraft server ip</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #3498db;">ZoneSMP_in.atenos.me</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #3498db;">Discord Community</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #3498db;"><a href="https://discord.gg/W83hX3Rz4N" class="custom-btn">Discord</a></td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px;">Studio</td>
+                    <td style="padding: 10px;"><a href="https://discord.gg/2YepfUgekn" class="custom-btn">ZoneSTUDIO</a></td>
+                </tr>
+            </table>
+        </div>
+        <div class="container feedback-box">
+            <h2>Feedback</h2>
+            <form id="feedback-form">
+                <label for="feedback-name" style="font-weight:600;">Name (optional):</label><br>
+                <input type="text" id="feedback-name" name="feedback-name" style="width:100%;padding:8px 10px;margin:8px 0 16px 0;border-radius:6px;border:1px solid #ccc;background:rgba(255,255,255,0.7);">
+                <label for="feedback-message" style="font-weight:600;">Your Feedback:</label><br>
+                <textarea id="feedback-message" name="feedback-message" rows="4" required style="width:100%;padding:10px 12px;margin:8px 0 16px 0;border-radius:8px;border:1px solid #ccc;background:rgba(255,255,255,0.7);"></textarea>
+                <div id="star-rating" style="margin: 10px 0 18px 0; font-size: 2em; color: #bdbdbd; display: flex; gap: 8px; cursor: pointer;">
+                  <span class="star" data-value="1" style="transition: color 0.2s, transform 0.18s;">&#9733;</span>
+                  <span class="star" data-value="2" style="transition: color 0.2s, transform 0.18s;">&#9733;</span>
+                  <span class="star" data-value="3" style="transition: color 0.2s, transform 0.18s;">&#9733;</span>
+                  <span class="star" data-value="4" style="transition: color 0.2s, transform 0.18s;">&#9733;</span>
+                  <span class="star" data-value="5" style="transition: color 0.2s, transform 0.18s;">&#9733;</span>
+                </div>
+                <input type="hidden" id="feedback-stars" name="feedback-stars" value="0">
+                <button type="submit" class="custom-btn">Send Feedback</button>
+            </form>
+            <div id="feedback-display" style="display:none;opacity:0;transition:opacity 0.5s cubic-bezier(.4,2,.6,1);margin-top:24px;padding:20px 24px;background:rgba(255,255,255,0.65);border-radius:18px;box-shadow:0 6px 32px rgba(44,62,80,0.18),0 1.5px 8px rgba(160,77,196,0.08);border:1.5px solid #a04dc4;color:#23272a;backdrop-filter:blur(12px) saturate(140%);display:flex;flex-direction:column;align-items:center;position:relative;">
+                <strong id="feedback-display-name" style="font-size:1.1em;"></strong>
+                <div id="feedback-display-stars" style="font-size:1.6em;margin:6px 0 0 0;color:#f7b731;"></div>
+                <p id="feedback-display-message" style="margin:10px 0 0 0;text-align:center;"></p>
+                <div id="feedback-thumbs" style="margin-top:18px;display:flex;gap:32px;align-items:center;">
+                  <span id="thumbs-up" style="font-size:2em;cursor:pointer;transition:color 0.2s,transform 0.18s;color:#bdbdbd;user-select:none;">👍 <span id="thumbs-up-count" style="font-size:0.7em;vertical-align:middle;">0</span></span>
+                  <span id="thumbs-down" style="font-size:2em;cursor:pointer;transition:color 0.2s,transform 0.18s;color:#bdbdbd;user-select:none;">👎 <span id="thumbs-down-count" style="font-size:0.7em;vertical-align:middle;">0</span></span>
+                </div>
+                <button id="delete-feedback" title="Delete feedback" style="position:absolute;bottom:18px;right:18px;background:rgba(231,76,60,0.12);border:none;border-radius:50%;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background 0.2s;"><span style="font-size:1.6em;color:#e74c3c;">🗑️</span></button>
+            </div>
+        </div>
+        <script>
+        // Star rating logic
+        var stars = document.querySelectorAll('#star-rating .star');
+        var starInput = document.getElementById('feedback-stars');
+        var selectedStars = 0;
+        // Set all stars to grey initially
+        function setStarsToGrey() {
+            stars.forEach(function(star) {
+                star.style.color = '#bdbdbd';
+                star.style.textShadow = '0 1px 2px #fff';
+            });
+        }
+        setStarsToGrey();
+        stars.forEach(function(star, idx) {
+            star.addEventListener('mouseenter', function() {
+                highlightStars(idx+1);
+                animateStars(idx+1);
+            });
+            star.addEventListener('mouseleave', function() {
+                if(selectedStars === 0) {
+                    setStarsToGrey();
+                } else {
+                    highlightStars(selectedStars);
+                }
+                animateStars(selectedStars);
+            });
+            star.addEventListener('click', function() {
+                selectedStars = idx+1;
+                starInput.value = selectedStars;
+                highlightStars(selectedStars);
+                animateStars(selectedStars, true);
+            });
+        });
+        function highlightStars(count) {
+            stars.forEach(function(star, i) {
+                star.style.color = i < count ? '#f7b731' : '#bdbdbd';
+                star.style.textShadow = i < count ? '0 2px 8px #fff, 0 0 6px #f7b73199' : '0 1px 2px #fff';
+            });
+        }
+        function animateStars(count, click) {
+            stars.forEach(function(star, i) {
+                if (i < count) {
+                    star.style.transform = click ? 'scale(1.25)' : 'scale(1.12)';
+                } else {
+                    star.style.transform = 'scale(1)';
+                }
+            });
+            if (click) {
+                setTimeout(function() {
+                    stars.forEach(function(star, i) {
+                        star.style.transform = i < count ? 'scale(1.12)' : 'scale(1)';
+                    });
+                }, 180);
+            }
+        }
+        // Thumbs logic with counters
+        var thumbsUp = document.getElementById('thumbs-up');
+        var thumbsDown = document.getElementById('thumbs-down');
+        var thumbsUpCount = document.getElementById('thumbs-up-count');
+        var thumbsDownCount = document.getElementById('thumbs-down-count');
+        var thumbState = null;
+        var upCount = 0;
+        var downCount = 0;
+        function resetThumbs() {
+            thumbsUp.style.color = '#bdbdbd';
+            thumbsDown.style.color = '#bdbdbd';
+            thumbsUp.style.transform = 'scale(1)';
+            thumbsDown.style.transform = 'scale(1)';
+            thumbState = null;
+        }
+        thumbsUp.onclick = function() {
+            if(thumbState === 'up') {
+                thumbsUp.style.color = '#bdbdbd';
+                thumbState = null;
+                if (upCount > 0) upCount--;
+            } else {
+                thumbsUp.style.color = '#27ae60';
+                thumbsDown.style.color = '#bdbdbd';
+                thumbState = 'up';
+                if (thumbState !== 'up') upCount++;
+                if (downCount > 0 && thumbState === 'up') downCount--;
+                if (downCount < 0) downCount = 0;
+                downCount = 0;
+            }
+            thumbsUpCount.textContent = upCount;
+            thumbsDownCount.textContent = downCount;
+        };
+        thumbsDown.onclick = function() {
+            if(thumbState === 'down') {
+                thumbsDown.style.color = '#bdbdbd';
+                thumbState = null;
+                if (downCount > 0) downCount--;
+            } else {
+                thumbsDown.style.color = '#e74c3c';
+                thumbsUp.style.color = '#bdbdbd';
+                thumbState = 'down';
+                if (thumbState !== 'down') downCount++;
+                if (upCount > 0 && thumbState === 'down') upCount--;
+                if (upCount < 0) upCount = 0;
+                upCount = 0;
+            }
+            thumbsUpCount.textContent = upCount;
+            thumbsDownCount.textContent = downCount;
+        };
+        function resetThumbCounts() {
+            upCount = 0;
+            downCount = 0;
+            thumbsUpCount.textContent = upCount;
+            thumbsDownCount.textContent = downCount;
+        }
+        resetThumbs();
+        resetThumbCounts();
+        // Feedback form logic
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var name = document.getElementById('feedback-name').value.trim();
+            var message = document.getElementById('feedback-message').value.trim();
+            var starsVal = parseInt(document.getElementById('feedback-stars').value, 10) || 0;
+            if(message.length === 0) return;
+            document.getElementById('feedback-display-name').textContent = name ? name : 'Anonymous';
+            // Show stars in display
+            var starDisplay = '';
+            for(var i=0;i<5;i++) starDisplay += i<starsVal ? '★' : '☆';
+            document.getElementById('feedback-display-stars').textContent = starDisplay;
+            document.getElementById('feedback-display-message').textContent = message;
+            var box = document.getElementById('feedback-display');
+            box.style.display = 'flex';
+            setTimeout(function(){ box.style.opacity = 1; }, 10);
+            document.getElementById('feedback-form').reset();
+            setStarsToGrey(); selectedStars=0; starInput.value=0;
+            resetThumbs();
+            resetThumbCounts();
+        });
+        // Trash/delete feedback logic
+        document.getElementById('delete-feedback').onclick = function() {
+            var box = document.getElementById('feedback-display');
+            box.style.opacity = 0;
+            setTimeout(function(){ box.style.display = 'none'; }, 400);
+        };
+        </script>
+    </body>
+</html>
